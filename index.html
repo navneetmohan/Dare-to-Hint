@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dare Challenge</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        #hint { display: none; color: green; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Random Dare Challenge</h1>
+    <button onclick="startDare()">Start Dare</button>
+    <p id="dare"></p>
+    <button id="completeBtn" onclick="revealHint()" style="display:none;">Complete Dare</button>
+    <p id="hint"></p>
+
+    <script>
+        const dares = [
+            { dare: "Do 10 push-ups!", hint: "Strength comes from consistency." },
+            { dare: "Sing a song out loud!", hint: "Music is the key to the soul." },
+            { dare: "Text a random emoji to your last contact!", hint: "Communication is key." }
+        ];
+
+        let currentDare = null;
+
+        function startDare() {
+            let randomIndex = Math.floor(Math.random() * dares.length);
+            currentDare = dares[randomIndex];
+            document.getElementById("dare").textContent = currentDare.dare;
+            document.getElementById("completeBtn").style.display = "block";
+            document.getElementById("hint").style.display = "none";
+        }
+
+        function revealHint() {
+            if (currentDare) {
+                document.getElementById("hint").textContent = currentDare.hint;
+                document.getElementById("hint").style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>
