@@ -21,6 +21,7 @@
             box-sizing: border-box;
             overflow: hidden;
             position: relative;
+            transition: background 0.5s ease-in-out;
         }
         h1 {
             font-size: 2rem;
@@ -29,8 +30,9 @@
             text-transform: uppercase;
             letter-spacing: 1.5px;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+            transition: color 0.3s ease-in-out;
         }
-        button {
+        select, button {
             background: linear-gradient(135deg, #ff7eb3, #ff758c);
             color: white;
             border: none;
@@ -47,19 +49,28 @@
             position: relative;
             overflow: hidden;
         }
+        select {
+            background: white;
+            color: black;
+            text-align: center;
+        }
+        select option {
+            background: black;
+            color: white;
+        }
         button:hover {
-            transform: scale(1.05);
-            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+            transform: scale(1.08);
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.4);
         }
         button:active {
-            transform: scale(0.98);
+            transform: scale(0.96);
         }
         #dare, #hint {
             font-size: 1.4rem;
             margin-top: 20px;
             opacity: 0;
             transform: translateY(20px);
-            transition: all 0.5s ease-in-out;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
             width: 90%;
             max-width: 350px;
             word-wrap: break-word;
@@ -80,71 +91,62 @@
     </style>
 </head>
 <body>
-    <h1>Dare to hint</h1>
-    <button id="startBtn" onclick="startDare()">Start Dare</button>
+    <h1>Dare 2 Hint</h1>
+    <select id="challengeSelect">
+        <option value="math">Solve a math riddle!</option>
+        <option value="riddle">Crack the mystery code!</option>
+        <option value="puzzle">Solve a tricky puzzle!</option>
+    </select>
+    <button id="startBtn" onclick="startDare()">Dare</button>
     <p id="dare"></p>
     <button id="completeBtn" onclick="revealHint()" style="display:none;">Complete Dare</button>
     <p id="hint"></p>
-    <button id="shuffleHintBtn" onclick="shuffleHint()" style="display:none;">Shuffle Hint</button>
     <button id="clearBtn" onclick="resetGame()" style="display:none;">Clear</button>
 
     <script>
+        const challenges = {
+            math: { hint: "Numbers are the key to everything!" },
+            riddle: { hint: "Look beyond the obvious and think outside the box." },
+            puzzle: { hint: "Break it down into smaller pieces." }
+        };
+
         const dares = [
-            { dare: "Do 10 push-ups!", hints: ["Strength comes from consistency.", "Every rep counts.", "Push past your limits."] },
-            { dare: "Sing a song out loud!", hints: ["Music is the key to the soul.", "Sing from the heart.", "Confidence makes it better."] },
-            { dare: "Text a random emoji to your last contact!", hints: ["Communication is key.", "Emojis express emotions.", "Make someone smile today."] }
+            "Do 10 jumping jacks!",
+            "Sing your favorite song!",
+            "Spin around 5 times!",
+            "Dance for 30 seconds!",
+            "Recite the alphabet backwards!"
         ];
 
-        let currentDare = null;
-        let hintIndex = 0;
-        let audio = new Audio('https://www.myinstants.com/media/sounds/button-click.mp3');
+        let currentChallenge = null;
 
         function startDare() {
-            let randomIndex = Math.floor(Math.random() * dares.length);
-            currentDare = dares[randomIndex];
-            hintIndex = 0;
-            document.getElementById("dare").textContent = currentDare.dare;
+            let selectedChallenge = document.getElementById("challengeSelect").value;
+            currentChallenge = challenges[selectedChallenge];
+            let randomDare = dares[Math.floor(Math.random() * dares.length)];
+            document.getElementById("dare").textContent = randomDare;
             document.getElementById("dare").classList.add("show");
             document.getElementById("startBtn").style.display = "none";
             document.getElementById("completeBtn").style.display = "block";
-            document.getElementById("hint").style.display = "none";
-            document.getElementById("shuffleHintBtn").style.display = "none";
-            document.getElementById("clearBtn").style.display = "none";
-            playSound();
         }
 
         function revealHint() {
-            if (currentDare) {
-                document.getElementById("hint").textContent = currentDare.hints[hintIndex];
-                document.getElementById("hint").style.display = "block";
+            if (currentChallenge) {
+                document.getElementById("hint").textContent = currentChallenge.hint;
                 document.getElementById("hint").classList.add("show");
-                document.getElementById("shuffleHintBtn").style.display = "block";
+                document.getElementById("completeBtn").style.display = "none";
                 document.getElementById("clearBtn").style.display = "block";
-                playSound();
-            }
-        }
-
-        function shuffleHint() {
-            if (currentDare) {
-                hintIndex = (hintIndex + 1) % currentDare.hints.length;
-                document.getElementById("hint").textContent = currentDare.hints[hintIndex];
-                playSound();
             }
         }
 
         function resetGame() {
             document.getElementById("dare").textContent = "";
             document.getElementById("hint").textContent = "";
-            document.getElementById("startBtn").style.display = "block";
-            document.getElementById("completeBtn").style.display = "none";
-            document.getElementById("shuffleHintBtn").style.display = "none";
-            document.getElementById("clearBtn").style.display = "none";
             document.getElementById("dare").classList.remove("show");
             document.getElementById("hint").classList.remove("show");
-        }
-
-        function playSound() {
-            audio.play();
+            document.getElementById("startBtn").style.display = "block";
+            document.getElementById("completeBtn").style.display = "none";
+            document.getElementById("clearBtn").style.display = "none";
         }
     </script>
 </body>
